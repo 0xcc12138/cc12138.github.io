@@ -2,6 +2,19 @@
 <search> 
   
   
+    
+    <entry>
+      <title>Hello</title>
+      <link href="/hello/"/>
+      <url>/hello/</url>
+      
+        <content type="html"><![CDATA[<p>占个位🙂</p>]]></content>
+      
+      
+      
+    </entry>
+    
+    
   
   
 </search>
