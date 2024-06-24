@@ -1,0 +1,286 @@
+<!DOCTYPE html><html lang="zh-CN" data-theme="light"><head><meta charset="UTF-8"><meta http-equiv="X-UA-Compatible" content="IE=edge"><meta name="viewport" content="width=device-width, initial-scale=1.0,viewport-fit=cover"><title>C++异常处理分析与还原 | Cc12138's blog</title><meta name="author" content="Ccai"><meta name="copyright" content="Ccai"><meta name="format-detection" content="telephone=no"><meta name="theme-color" content="#ffffff"><meta name="description" content="c++异常处理12345678910111213141516171819202122#include &lt;iostream&gt;using namespace std;int main(int argc)&#123;	try &#123;		if (argc &#x3D;&#x3D; 1)			throw 1;	&#125;	catch (int e)	&#123;		cout &lt;&lt; &quot;c">
+<meta property="og:type" content="article">
+<meta property="og:title" content="C++异常处理分析与还原">
+<meta property="og:url" content="http://example.com/c++%E5%BC%82%E5%B8%B8/index.html">
+<meta property="og:site_name" content="Cc12138&#39;s blog">
+<meta property="og:description" content="c++异常处理12345678910111213141516171819202122#include &lt;iostream&gt;using namespace std;int main(int argc)&#123;	try &#123;		if (argc &#x3D;&#x3D; 1)			throw 1;	&#125;	catch (int e)	&#123;		cout &lt;&lt; &quot;c">
+<meta property="og:locale" content="zh_CN">
+<meta property="og:image" content="http://example.com/img/Eason.png">
+<meta property="article:published_time" content="2024-06-24T08:47:52.000Z">
+<meta property="article:modified_time" content="2024-06-24T08:47:34.978Z">
+<meta property="article:author" content="Ccai">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:image" content="http://example.com/img/Eason.png"><link rel="shortcut icon" href="/img/rose.png"><link rel="canonical" href="http://example.com/c++%E5%BC%82%E5%B8%B8/index.html"><link rel="preconnect" href="//cdn.jsdelivr.net"/><link rel="preconnect" href="//busuanzi.ibruce.info"/><link rel="stylesheet" href="/css/index.css?v=4.13.0"><link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@fortawesome/fontawesome-free@6.5.1/css/all.min.css"><link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@fancyapps/ui@5.0.33/dist/fancybox/fancybox.min.css" media="print" onload="this.media='all'"><script>const GLOBAL_CONFIG = {
+  root: '/',
+  algolia: undefined,
+  localSearch: {"path":"/search.xml","languages":{"hits_empty":"找不到您查询的内容：${query}","hits_stats":"共找到 ${hits} 篇文章"}},
+  translate: undefined,
+  noticeOutdate: undefined,
+  highlight: {"plugin":"highlight.js","highlightCopy":true,"highlightLang":true,"highlightHeightLimit":false},
+  copy: {
+    success: '复制成功',
+    error: '复制错误',
+    noSupport: '浏览器不支持'
+  },
+  relativeDate: {
+    homepage: true,
+    post: true
+  },
+  runtime: '',
+  dateSuffix: {
+    just: '刚刚',
+    min: '分钟前',
+    hour: '小时前',
+    day: '天前',
+    month: '个月前'
+  },
+  copyright: undefined,
+  lightbox: 'fancybox',
+  Snackbar: undefined,
+  infinitegrid: {
+    js: 'https://cdn.jsdelivr.net/npm/@egjs/infinitegrid@4.11.1/dist/infinitegrid.min.js',
+    buttonText: '加载更多'
+  },
+  isPhotoFigcaption: false,
+  islazyload: false,
+  isAnchor: false,
+  percent: {
+    toc: ,
+    rightside: false,
+  },
+  autoDarkmode: false
+}</script><script id="config-diff">var GLOBAL_CONFIG_SITE = {
+  title: 'C++异常处理分析与还原',
+  isPost: true,
+  isHome: false,
+  isHighlightShrink: false,
+  isToc: true,
+  postUpdate: '2024-06-24 16:47:34'
+}</script><script>(win=>{
+      win.saveToLocal = {
+        set: (key, value, ttl) => {
+          if (ttl === 0) return
+          const now = Date.now()
+          const expiry = now + ttl * 86400000
+          const item = {
+            value,
+            expiry
+          }
+          localStorage.setItem(key, JSON.stringify(item))
+        },
+      
+        get: key => {
+          const itemStr = localStorage.getItem(key)
+      
+          if (!itemStr) {
+            return undefined
+          }
+          const item = JSON.parse(itemStr)
+          const now = Date.now()
+      
+          if (now > item.expiry) {
+            localStorage.removeItem(key)
+            return undefined
+          }
+          return item.value
+        }
+      }
+    
+      win.getScript = (url, attr = {}) => new Promise((resolve, reject) => {
+        const script = document.createElement('script')
+        script.src = url
+        script.async = true
+        script.onerror = reject
+        script.onload = script.onreadystatechange = function() {
+          const loadState = this.readyState
+          if (loadState && loadState !== 'loaded' && loadState !== 'complete') return
+          script.onload = script.onreadystatechange = null
+          resolve()
+        }
+
+        Object.keys(attr).forEach(key => {
+          script.setAttribute(key, attr[key])
+        })
+
+        document.head.appendChild(script)
+      })
+    
+      win.getCSS = (url, id = false) => new Promise((resolve, reject) => {
+        const link = document.createElement('link')
+        link.rel = 'stylesheet'
+        link.href = url
+        if (id) link.id = id
+        link.onerror = reject
+        link.onload = link.onreadystatechange = function() {
+          const loadState = this.readyState
+          if (loadState && loadState !== 'loaded' && loadState !== 'complete') return
+          link.onload = link.onreadystatechange = null
+          resolve()
+        }
+        document.head.appendChild(link)
+      })
+    
+      win.activateDarkMode = () => {
+        document.documentElement.setAttribute('data-theme', 'dark')
+        if (document.querySelector('meta[name="theme-color"]') !== null) {
+          document.querySelector('meta[name="theme-color"]').setAttribute('content', '#0d0d0d')
+        }
+      }
+      win.activateLightMode = () => {
+        document.documentElement.setAttribute('data-theme', 'light')
+        if (document.querySelector('meta[name="theme-color"]') !== null) {
+          document.querySelector('meta[name="theme-color"]').setAttribute('content', '#ffffff')
+        }
+      }
+      const t = saveToLocal.get('theme')
+    
+        if (t === 'dark') activateDarkMode()
+        else if (t === 'light') activateLightMode()
+      
+      const asideStatus = saveToLocal.get('aside-status')
+      if (asideStatus !== undefined) {
+        if (asideStatus === 'hide') {
+          document.documentElement.classList.add('hide-aside')
+        } else {
+          document.documentElement.classList.remove('hide-aside')
+        }
+      }
+    
+      const detectApple = () => {
+        if(/iPad|iPhone|iPod|Macintosh/.test(navigator.userAgent)){
+          document.documentElement.classList.add('apple')
+        }
+      }
+      detectApple()
+    })(window)</script><meta name="generator" content="Hexo 7.2.0"></head><body><div id="web_bg"></div><div id="sidebar"><div id="menu-mask"></div><div id="sidebar-menus"><div class="avatar-img is-center"><img src="/img/Eason.png" onerror="onerror=null;src='/img/friend_404.gif'" alt="avatar"/></div><div class="sidebar-site-data site-data is-center"><a href="/archives/"><div class="headline">文章</div><div class="length-num">3</div></a><a href="/tags/"><div class="headline">标签</div><div class="length-num">0</div></a><a href="/categories/"><div class="headline">分类</div><div class="length-num">0</div></a></div><hr class="custom-hr"/><div class="menus_items"><div class="menus_item"><a class="site-page" href="/"><i class="fa-fw fas fa-home"></i><span> 首页</span></a></div><div class="menus_item"><a class="site-page" href="/archives/"><i class="fa-fw fas fa-archive"></i><span> 时间轴</span></a></div><div class="menus_item"><a class="site-page" href="/tags/"><i class="fa-fw fas fa-tags"></i><span> 标签</span></a></div><div class="menus_item"><a class="site-page" href="/categories/"><i class="fa-fw fas fa-folder-open"></i><span> 分类</span></a></div><div class="menus_item"><a class="site-page group" href="javascript:void(0);"><i class="fa-fw fa fa-heartbeat"></i><span> 清单</span><i class="fas fa-chevron-down"></i></a><ul class="menus_item_child"><li><a class="site-page child" href="/music/"><i class="fa-fw fas fa-music"></i><span> 音乐</span></a></li><li><a class="site-page child" href="/Gallery/"><i class="fa-fw fas fa-images"></i><span> 照片</span></a></li><li><a class="site-page child" href="/movies/"><i class="fa-fw fas fa-video"></i><span> 电影</span></a></li></ul></div><div class="menus_item"><a class="site-page" href="/link/"><i class="fa-fw fas fa-link"></i><span> 友链</span></a></div><div class="menus_item"><a class="site-page" href="/about/"><i class="fa-fw fas fa-heart"></i><span> 关于</span></a></div></div></div></div><div class="post" id="body-wrap"><header class="post-bg" id="page-header"><nav id="nav"><span id="blog-info"><a href="/" title="Cc12138's blog"><span class="site-name">Cc12138's blog</span></a></span><div id="menus"><div id="search-button"><a class="site-page social-icon search" href="javascript:void(0);"><i class="fas fa-search fa-fw"></i><span> 搜索</span></a></div><div class="menus_items"><div class="menus_item"><a class="site-page" href="/"><i class="fa-fw fas fa-home"></i><span> 首页</span></a></div><div class="menus_item"><a class="site-page" href="/archives/"><i class="fa-fw fas fa-archive"></i><span> 时间轴</span></a></div><div class="menus_item"><a class="site-page" href="/tags/"><i class="fa-fw fas fa-tags"></i><span> 标签</span></a></div><div class="menus_item"><a class="site-page" href="/categories/"><i class="fa-fw fas fa-folder-open"></i><span> 分类</span></a></div><div class="menus_item"><a class="site-page group" href="javascript:void(0);"><i class="fa-fw fa fa-heartbeat"></i><span> 清单</span><i class="fas fa-chevron-down"></i></a><ul class="menus_item_child"><li><a class="site-page child" href="/music/"><i class="fa-fw fas fa-music"></i><span> 音乐</span></a></li><li><a class="site-page child" href="/Gallery/"><i class="fa-fw fas fa-images"></i><span> 照片</span></a></li><li><a class="site-page child" href="/movies/"><i class="fa-fw fas fa-video"></i><span> 电影</span></a></li></ul></div><div class="menus_item"><a class="site-page" href="/link/"><i class="fa-fw fas fa-link"></i><span> 友链</span></a></div><div class="menus_item"><a class="site-page" href="/about/"><i class="fa-fw fas fa-heart"></i><span> 关于</span></a></div></div><div id="toggle-menu"><a class="site-page" href="javascript:void(0);"><i class="fas fa-bars fa-fw"></i></a></div></div></nav><div id="post-info"><h1 class="post-title">C++异常处理分析与还原</h1><div id="post-meta"><div class="meta-firstline"><span class="post-meta-date"><i class="far fa-calendar-alt fa-fw post-meta-icon"></i><span class="post-meta-label">发表于</span><time class="post-meta-date-created" datetime="2024-06-24T08:47:52.000Z" title="发表于 2024-06-24 16:47:52">2024-06-24</time><span class="post-meta-separator">|</span><i class="fas fa-history fa-fw post-meta-icon"></i><span class="post-meta-label">更新于</span><time class="post-meta-date-updated" datetime="2024-06-24T08:47:34.978Z" title="更新于 2024-06-24 16:47:34">2024-06-24</time></span></div><div class="meta-secondline"><span class="post-meta-separator">|</span><span class="post-meta-pv-cv" id="" data-flag-title="C++异常处理分析与还原"><i class="far fa-eye fa-fw post-meta-icon"></i><span class="post-meta-label">阅读量:</span><span id="busuanzi_value_page_pv"><i class="fa-solid fa-spinner fa-spin"></i></span></span></div></div></div></header><main class="layout" id="content-inner"><div id="post"><article class="post-content" id="article-container"><h2 id="c-异常处理"><a href="#c-异常处理" class="headerlink" title="c++异常处理"></a>c++异常处理</h2><figure class="highlight c++"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">#<span class="keyword">include</span> <span class="string">&lt;iostream&gt;</span></span></span><br><span class="line"><span class="keyword">using</span> <span class="keyword">namespace</span> std;</span><br><span class="line"></span><br><span class="line"><span class="function"><span class="type">int</span> <span class="title">main</span><span class="params">(<span class="type">int</span> argc)</span></span></span><br><span class="line"><span class="function"></span>&#123;</span><br><span class="line">	<span class="keyword">try</span> &#123;</span><br><span class="line">		<span class="keyword">if</span> (argc == <span class="number">1</span>)</span><br><span class="line">			<span class="keyword">throw</span> <span class="number">1</span>;</span><br><span class="line">	&#125;</span><br><span class="line"></span><br><span class="line">	<span class="built_in">catch</span> (<span class="type">int</span> e)</span><br><span class="line">	&#123;</span><br><span class="line">		cout &lt;&lt; <span class="string">&quot;catch int &quot;</span> &lt;&lt; e &lt;&lt; endl;</span><br><span class="line">	&#125;</span><br><span class="line"></span><br><span class="line">	<span class="built_in">catch</span> (...)</span><br><span class="line">	&#123;</span><br><span class="line">		cout &lt;&lt; <span class="string">&quot;catch all&quot;</span> &lt;&lt; endl;</span><br><span class="line">	&#125;</span><br><span class="line"></span><br><span class="line">	<span class="keyword">return</span> <span class="number">0</span>;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<p>一旦try内的语句有抛出（throw）异常，就会去搜索对应的catch块执行语句</p>
+<p>值得注意的是，在C++中，当一个异常被抛出时，程序会在找到第一个匹配的catch块之后处理该异常，然后继续执行后续代码。并且，一旦异常被捕获并处理，程序不会再继续搜索其他的catch块来处理同一个异常。</p>
+<h3 id="事件查看器"><a href="#事件查看器" class="headerlink" title="事件查看器"></a>事件查看器</h3><p>介绍下事件查看器这个工具</p>
+<p><img src="/c++%E5%BC%82%E5%B8%B8/1718600434405.png" alt="1718600434405"></p>
+<p>可以用来查看具体是什么异常，但是貌似也可以用调试？？</p>
+<p>这里手动造一个异常</p>
+<p><img src="/c++%E5%BC%82%E5%B8%B8/1718600575669.png" alt="1718600575669"></p>
+<p>打开事件查看器，就可以发现具体的错误码和错误偏移，还有路径</p>
+<p><img src="/c++%E5%BC%82%E5%B8%B8/1718600561100.png" alt="1718600561100"></p>
+<p>值得注意的是，这个偏移量是ROV，相对于ImageBase的偏移</p>
+<h3 id="具体分析C-异常过程"><a href="#具体分析C-异常过程" class="headerlink" title="具体分析C++异常过程"></a>具体分析C++异常过程</h3><p>![C++ RE 08](c++异常&#x2F;C++ RE 08.png)</p>
+<p>测试代码：</p>
+<figure class="highlight c++"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">#<span class="keyword">include</span> <span class="string">&lt;iostream&gt;</span></span></span><br><span class="line"><span class="keyword">using</span> <span class="keyword">namespace</span> std;</span><br><span class="line"><span class="function"><span class="type">int</span> <span class="title">main</span><span class="params">()</span></span></span><br><span class="line"><span class="function"></span>&#123;</span><br><span class="line">	<span class="keyword">try</span></span><br><span class="line">	&#123;</span><br><span class="line">		<span class="keyword">throw</span> <span class="number">1</span>;</span><br><span class="line">	&#125;</span><br><span class="line"></span><br><span class="line">	<span class="built_in">catch</span> (<span class="type">int</span> e)</span><br><span class="line">	&#123;</span><br><span class="line">		cout &lt;&lt; <span class="string">&quot;触发int异常\n&quot;</span> &lt;&lt; endl;</span><br><span class="line">	&#125;</span><br><span class="line"></span><br><span class="line">	<span class="built_in">catch</span> (<span class="type">float</span> e)</span><br><span class="line">	&#123;</span><br><span class="line">		cout &lt;&lt; <span class="string">&quot;触发了float异常\n&quot;</span> &lt;&lt; endl;</span><br><span class="line">	&#125;</span><br><span class="line"></span><br><span class="line">	<span class="keyword">return</span> <span class="number">0</span>;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+
+
+<p>当某个函数有try catch的时候，会在函数头注册一个异常回调函数：</p>
+<p>例如下面的main函数开头：</p>
+<p><img src="/c++%E5%BC%82%E5%B8%B8/1718710227685.png" alt="1718710227685"></p>
+<p><img src="/c++%E5%BC%82%E5%B8%B8/1719061935153.png" alt="1719061935153"></p>
+<p>分析一下这个代码是干啥的：</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br></pre></td><td class="code"><pre><span class="line">.text:00412640 55                            push    ebp</span><br><span class="line">.text:00412641 8B EC                         mov     ebp, esp</span><br><span class="line">.text:00412643 6A FF                         push    0FFFFFFFFh</span><br><span class="line">.text:00412645 68 00 77 41 00                push    offset __ehhandler$_main</span><br><span class="line">.text:0041264A 64 A1 00 00 00 00             mov     eax, large fs:0</span><br><span class="line">.text:00412650 50                            push    eax</span><br><span class="line">.text:00412651 51                            push    ecx</span><br><span class="line">.text:00412652 81 EC 08 01 00 00             sub     esp, 108h</span><br><span class="line">.text:00412658 53                            push    ebx</span><br><span class="line">.text:00412659 56                            push    esi</span><br><span class="line">.text:0041265A 57                            push    edi</span><br></pre></td></tr></table></figure>
+
+<p>push    offset  __ ehhandler$ _main，这是一个函数指针，放入栈中</p>
+<p>mov     eax, large fs:0	将异常链表存入eax</p>
+<p>后续会有</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">.text:00412675 8D 45 F4                      lea     eax, [ebp-0Ch]</span><br><span class="line">.text:00412678 64 A3 00 00 00 00             mov     large fs:0, eax</span><br></pre></td></tr></table></figure>
+
+<p>这个就是将__ehhandler $ _main这个函数置为链表头，原来的作为Next指针存着</p>
+<p>这样就实现了将函数_ _ehhandler$ _main 挂入异常链表</p>
+<p>在含有try的函数结束之后</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">.text:008527A6 8B 4D F4                      mov     ecx, [ebp+var_C]</span><br><span class="line">.text:008527A9 64 89 0D 00 00 00 00          mov     large fs:0, ecx</span><br></pre></td></tr></table></figure>
+
+<p>会有一个注销异常链表的操作，这里就是拿出next，然后覆盖掉原来的异常链表，这样，就恢复了原来的异常链表（即注销）</p>
+<p>之前的 push    0FFFFFFFFh，代表try还没开始，也就是说 [ebp-0x4] 位置代表着 trylevel，如果是0xffffffff则代表try块还未开始，如果是0，就代表进入try块</p>
+<p>当结束try块以后，还是会将这个trylevel置为-1</p>
+<p><img src="/c++%E5%BC%82%E5%B8%B8/1719062524688.png" alt="1719062524688"></p>
+<p>如果有try嵌套：</p>
+<p><img src="/c++%E5%BC%82%E5%B8%B8/1719062762747.png" alt="1719062762747"></p>
+<p>反正也是赋值为非负的一个数</p>
+<p>双击__enhandler__$main</p>
+<p>在调用函数__CxxFrameHandler之前，会传递一个参数，这里就是eax</p>
+<p>其实这就是FuncInfo函数信息表</p>
+<p><img src="/c++%E5%BC%82%E5%B8%B8/1718710265704.png" alt="1718710265704"></p>
+<h4 id="FuncInfo结构"><a href="#FuncInfo结构" class="headerlink" title="FuncInfo结构"></a>FuncInfo结构</h4><p>介绍一下<strong>FuncInfo</strong></p>
+<figure class="highlight c++"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">struct</span> <span class="title class_">FuncInfo</span></span><br><span class="line">&#123;</span><br><span class="line">    magicNumber dd ;? <span class="comment">//编译器生成的固定数字</span></span><br><span class="line">    maxState dd ? ;<span class="comment">//最大栈展开数的下标值，也就是trylevel最大不能超过maxState,同时也是栈展开最大的次数</span></span><br><span class="line">    pUnwindMap dd ? ;<span class="comment">//指向栈展开函数表的指针，指向UnwindMapEntry表结构</span></span><br><span class="line">    dwTryCount dd ? ;<span class="comment">//一个函数里面的Try块的数量</span></span><br><span class="line">    pTryBlockMap dd ? ;<span class="comment">//Try块的列表，指向TryBlockMapEntry表的结构</span></span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="comment">//64位程序下会额外多几个成员</span></span><br></pre></td></tr></table></figure>
+
+<p>其中pUnwindMap和pTryBlockMap分别指向 UnwindMapEntry 和 TryBlockMapEntry 结构</p>
+<p>UnwindMapEntry要配合FuncInfo里面的maxState使用。</p>
+<p>UnwindMapEntry的作用：栈展开的时候需要执行的函数由UnwindMapEntry表记录</p>
+<p>TryBlockMapEntry的作用：这个结构用来判断异常产生在哪一个Try块</p>
+<h4 id="UnwindMapEntry结构"><a href="#UnwindMapEntry结构" class="headerlink" title="UnwindMapEntry结构"></a>UnwindMapEntry结构</h4><p>这个结构记录了需要执行函数</p>
+<figure class="highlight c++"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">struct</span> <span class="title class_">UnwindMapEntry</span></span><br><span class="line">&#123;</span><br><span class="line">    DWORD toState;<span class="comment">//栈展开数下标值,即Trylevel，到时候看范围就知道</span></span><br><span class="line">    DWORD lpFuncAction;<span class="comment">//展开执行的函数</span></span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+
+
+<p>由于栈展开存在多个对象，因此以数组的形式记录每个对象的析构信息</p>
+<p>toState 项用来判断结构是否属于处于数组中，lpFuncAction用于记录析构函数所在的地址</p>
+<h4 id="TryBlockMapEntry结构"><a href="#TryBlockMapEntry结构" class="headerlink" title="TryBlockMapEntry结构"></a>TryBlockMapEntry结构</h4><p>在这个结构体中可以知道对应的Try有几个Catch，并且能找到对应的Catch块</p>
+<p>TryBlockMapEntry块成员长这样：</p>
+<figure class="highlight c++"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">struct</span> <span class="title class_">TryBlockMapEntry</span></span><br><span class="line">&#123;</span><br><span class="line">    DWORD tryLow;	<span class="comment">//try块的最小状态索引，用于范围检查（trylevel的最小索引）</span></span><br><span class="line">    DWORD tryHigh;  <span class="comment">//try块的最大状态索引，用于范围检查（trylevel的最大索引）</span></span><br><span class="line">    DWORD catchHigh; <span class="comment">//catch块的最高状态索引，用于范围检查（trylevel的上限）</span></span><br><span class="line">    DWORD dwCatchCount;	<span class="comment">//catch块的个数</span></span><br><span class="line">    DOWRD pCatchHandlerArray; <span class="comment">//catch块的描述，指向_msRttiDscr表结构</span></span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+
+
+<p>TryBlockMapEnrty 表结构用于判断异常产生在哪一个try块，tryLow，tryHigh 项用于检查产生的异常是否来源于try块中</p>
+<p><img src="/c++%E5%BC%82%E5%B8%B8/1719197846739.png" alt="1719197846739"></p>
+<p>最左边的TryLow才是真正的trylevel下标，另外一个TryHigh是用来描述范围的</p>
+<h4 id="msRttiDscr-结构"><a href="#msRttiDscr-结构" class="headerlink" title="_msRttiDscr 结构"></a>_msRttiDscr 结构</h4><p>这个结构用于描述try块中的某一个catch块的信息</p>
+<figure class="highlight c++"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">struct</span> <span class="title class_">_msRttiDscr</span></span><br><span class="line">&#123;</span><br><span class="line">    DWORD nFlag;	<span class="comment">//用于Catch块的匹配检查</span></span><br><span class="line">    DWORD pType;	<span class="comment">//catch块要捕捉的类型，指向TypeDescriptor表结构，如果是零，就代表所有类型，即catch all</span></span><br><span class="line">    DWORD dispCatchObjOffset;  <span class="comment">//用于定位异常对象在当前ESP中的偏移位置</span></span><br><span class="line">    DWORD CatchProc;	<span class="comment">//catch块的首地址，可以用来定位catch</span></span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+
+
+<p>具体来说：</p>
+<p>nFlag标记用于检查catch块的类型匹配：</p>
+<p>如果是 1 ：常量		2：变量		4：未知		8:引用</p>
+<p>异常的匹配信息存在pType所指向的结构</p>
+<p>这个结构便是 TypeDescriptor</p>
+<h4 id="TypeDescriptor结构"><a href="#TypeDescriptor结构" class="headerlink" title="TypeDescriptor结构"></a>TypeDescriptor结构</h4><p>这是一个记录 异常类型的结构：具体结构长这样：</p>
+<figure class="highlight c++"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">struct</span> <span class="title class_">TypeDescriptor</span></span><br><span class="line">&#123;</span><br><span class="line">    DWORD Hash;	<span class="comment">//类型名称的Hash数值</span></span><br><span class="line">    DWORD spare;<span class="comment">//保留</span></span><br><span class="line">    DWORD name;	<span class="comment">//类型名称</span></span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<p>有了这些信息之后，就可以通过与抛出异常时的信息进行对比，得到对应的表结构</p>
+<p>再通过_msRttiDscr结构中的CatchProc得到catch块的首地址</p>
+<h3 id="关于throw"><a href="#关于throw" class="headerlink" title="关于throw"></a>关于throw</h3><p>抛出异常的工作 由 throw 抛出，在源代码含有throw的函数体中可以找到	__CxxThrowException 这个函数，和之前  _CxxFrameHandler 类似，之前传进去的参数是	FuncInfo，这回是  ThrowInfo</p>
+<p><img src="/c++%E5%BC%82%E5%B8%B8/1719065341932.png" alt="1719065341932"></p>
+<p>这样可以通过参数，去获取抛出的对象（或者数值）</p>
+<p>另外一个参数就是ThrowInfo</p>
+<p>每一个throw都对应一个ThrowInfo和一个拷贝的对象。里面包含着对应的信息，包括抛出对象的类型（ThrowInfo），里面放了什么（从拷贝对象可知）</p>
+<p>下面是通过ThrowInfo和拷贝对象识别值和类型的过程</p>
+<p><video src="C++逆向/QQ录屏20240623215701~1.mp4"></video></p>
+<p><img src="/c++%E5%BC%82%E5%B8%B8/1719152317760.png" alt="1719152317760"></p>
+<p>但是为什么会有两个RTTI，这是表示CMyException *的类型和void *类型的异常都可以被接收</p>
+<h4 id="ThrowInfo结构"><a href="#ThrowInfo结构" class="headerlink" title="ThrowInfo结构"></a>ThrowInfo结构</h4><figure class="highlight c++"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">struct</span> <span class="title class_">ThrowInfo</span></span><br><span class="line">&#123;</span><br><span class="line">	DWORD nFlag;  <span class="comment">//抛出异常类型标记</span></span><br><span class="line">    DWORD pDestructor;	<span class="comment">//异常对象的析构函数地址</span></span><br><span class="line">    DWORD pForwardCompat;<span class="comment">//未知</span></span><br><span class="line">    DOWRD pCatchTableTypeArray <span class="comment">//catch块类型表，指向CatchTableTyoeArray表结构</span></span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+
+
+<p>nFlag为1的时候，表示抛出常量类型的异常；   2 表示抛出变量类型的异常	</p>
+<p>由于在try块中产生的异常被处理后就不会再返回try块了。因此pDestructor的作用就是记录try块里面的异常对象的析构函数地址，当异常处理完成以后调用异常对象的析构函数</p>
+<p>抛出异常所对应的catch块的类型的信息被记录在pCatchTableTypeArray所指向的CatchTableTyoeArray表结构</p>
+<h4 id="CatchTableTypeArray结构"><a href="#CatchTableTypeArray结构" class="headerlink" title="CatchTableTypeArray结构"></a>CatchTableTypeArray结构</h4><figure class="highlight c++"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">struct</span> <span class="title class_">CatchTableTyoeArray</span></span><br><span class="line">&#123;</span><br><span class="line">    DWORD dwCount;	<span class="comment">//CatchTableType 数组包含的元素个数</span></span><br><span class="line">    DWORD ppCatchTableType;	<span class="comment">//catch块的类型信息，类型为CatchTableType**</span></span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<p>ppCatchTableType是一个指向数组的指针，dwCount用来描述数组中元素的个数</p>
+<p>CatchTableType中含有含有处理异常时的所需相关信息</p>
+<h4 id="CatchTableType结构"><a href="#CatchTableType结构" class="headerlink" title="CatchTableType结构"></a>CatchTableType结构</h4><p>CatchTableType中含有含有处理异常时的所需相关信息</p>
+<figure class="highlight c++"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">struct</span> <span class="title class_">CatchTableType</span></span><br><span class="line">&#123;</span><br><span class="line">    DWORD flag;</span><br><span class="line">    DWORD pTypeInfo;<span class="comment">//指向异常类型的结构,指向TypeDescriptor表结构</span></span><br><span class="line">    DWORD thisDisplacement; <span class="comment">//基类信息</span></span><br><span class="line">    DWORD sizeorOffset; <span class="comment">//类的大小</span></span><br><span class="line">    DWORD pCopyFunction; <span class="comment">//复制构造函数的指针</span></span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<p>flag用于标记异常对象属于哪一种类型，例如指针，引用，对象等，标记值所代表的含义为：</p>
+<p>1：简单类型复制		2：已被捕获		4：有虚表基类复制		8：指针和类型引用复制</p>
+<p>当异常类型为对象的时候，由于对象存在基类等相关信息，因此需要将他们也记录下来，thisDisplacement保存了记录基类信息结构的首地址</p>
+<p>PMD结构：</p>
+<figure class="highlight c++"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">struct</span> <span class="title class_">PMD</span></span><br><span class="line">&#123;</span><br><span class="line">	DWORD dwOffsetToThis;	<span class="comment">//基类偏移</span></span><br><span class="line">    DWORD dwOffsetToVBase;	<span class="comment">//虚基类偏移</span></span><br><span class="line">    DWORD dwOffsetToVbTable; <span class="comment">//基类虚表偏移</span></span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+
+
+
+
+
+
+
+
+<p>注意注意：</p>
+<p>如果Try内有定义对象并且Throw了，那么就要进行析构，Try里面全部对象都要被析构</p>
+<h3 id="还原代码的逻辑："><a href="#还原代码的逻辑：" class="headerlink" title="还原代码的逻辑："></a>还原代码的逻辑：</h3><p><img src="/c++%E5%BC%82%E5%B8%B8/1719198058819.png" alt="1719198058819"></p>
+<p>进入一个函数首先看看有没有调用__CxxFrameHandler，和有没有对fs:[0]这个地址进行操作，这个是有异常的标志。</p>
+<p>然后一顿操作，把FuncInfo解析出来，有maxState个UnwindMapEntry结构，里面有存析构函数（如果存在析构，具体执行顺序看下标），然后还有dwTryCount个TryBlockMapEntry结构，里面存着Catch块的具体地址（_msRttiDscr 结构）</p>
+<p>catch可能不在IDA反编译出来的函数，所以看到try我们需要去自己找对应的catch</p>
+<p>解决了这些结构体，就可以看汇编还原代码了。</p>
+<p>不要把Catch当成一个函数，而是要把它当成代码块</p>
+<p><img src="/c++%E5%BC%82%E5%B8%B8/1719218558733.png" alt="1719218558733"></p>
+<p>看见trylevel为0，就可以匹配到对应的catch块了</p>
+</article><div class="post-copyright"><div class="post-copyright__author"><span class="post-copyright-meta"><i class="fas fa-circle-user fa-fw"></i>文章作者: </span><span class="post-copyright-info"><a href="http://example.com">Ccai</a></span></div><div class="post-copyright__type"><span class="post-copyright-meta"><i class="fas fa-square-arrow-up-right fa-fw"></i>文章链接: </span><span class="post-copyright-info"><a href="http://example.com/c++%E5%BC%82%E5%B8%B8/">http://example.com/c++%E5%BC%82%E5%B8%B8/</a></span></div><div class="post-copyright__notice"><span class="post-copyright-meta"><i class="fas fa-circle-exclamation fa-fw"></i>版权声明: </span><span class="post-copyright-info">本博客所有文章除特别声明外，均采用 <a href="https://creativecommons.org/licenses/by-nc-sa/4.0/" target="_blank">CC BY-NC-SA 4.0</a> 许可协议。转载请注明来自 <a href="http://example.com" target="_blank">Cc12138's blog</a>！</span></div></div><div class="tag_share"><div class="post-meta__tag-list"></div><div class="post_share"><div class="social-share" data-image="/img/Eason.png" data-sites="facebook,twitter,wechat,weibo,qq"></div><link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/butterfly-extsrc@1.1.3/sharejs/dist/css/share.min.css" media="print" onload="this.media='all'"><script src="https://cdn.jsdelivr.net/npm/butterfly-extsrc@1.1.3/sharejs/dist/js/social-share.min.js" defer></script></div></div><nav class="pagination-post" id="pagination"><div class="next-post pull-full"><a href="/hello/" title="Hello"><div class="cover" style="background: var(--default-bg-color)"></div><div class="pagination-info"><div class="label">下一篇</div><div class="next_info">Hello</div></div></a></div></nav></div><div class="aside-content" id="aside-content"><div class="sticky_layout"><div class="card-widget" id="card-toc"><div class="item-headline"><i class="fas fa-stream"></i><span>目录</span><span class="toc-percentage"></span></div><div class="toc-content"><ol class="toc"><li class="toc-item toc-level-2"><a class="toc-link" href="#c-%E5%BC%82%E5%B8%B8%E5%A4%84%E7%90%86"><span class="toc-number">1.</span> <span class="toc-text">c++异常处理</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#%E4%BA%8B%E4%BB%B6%E6%9F%A5%E7%9C%8B%E5%99%A8"><span class="toc-number">1.1.</span> <span class="toc-text">事件查看器</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E5%85%B7%E4%BD%93%E5%88%86%E6%9E%90C-%E5%BC%82%E5%B8%B8%E8%BF%87%E7%A8%8B"><span class="toc-number">1.2.</span> <span class="toc-text">具体分析C++异常过程</span></a><ol class="toc-child"><li class="toc-item toc-level-4"><a class="toc-link" href="#FuncInfo%E7%BB%93%E6%9E%84"><span class="toc-number">1.2.1.</span> <span class="toc-text">FuncInfo结构</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#UnwindMapEntry%E7%BB%93%E6%9E%84"><span class="toc-number">1.2.2.</span> <span class="toc-text">UnwindMapEntry结构</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#TryBlockMapEntry%E7%BB%93%E6%9E%84"><span class="toc-number">1.2.3.</span> <span class="toc-text">TryBlockMapEntry结构</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#msRttiDscr-%E7%BB%93%E6%9E%84"><span class="toc-number">1.2.4.</span> <span class="toc-text">_msRttiDscr 结构</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#TypeDescriptor%E7%BB%93%E6%9E%84"><span class="toc-number">1.2.5.</span> <span class="toc-text">TypeDescriptor结构</span></a></li></ol></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E5%85%B3%E4%BA%8Ethrow"><span class="toc-number">1.3.</span> <span class="toc-text">关于throw</span></a><ol class="toc-child"><li class="toc-item toc-level-4"><a class="toc-link" href="#ThrowInfo%E7%BB%93%E6%9E%84"><span class="toc-number">1.3.1.</span> <span class="toc-text">ThrowInfo结构</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#CatchTableTypeArray%E7%BB%93%E6%9E%84"><span class="toc-number">1.3.2.</span> <span class="toc-text">CatchTableTypeArray结构</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#CatchTableType%E7%BB%93%E6%9E%84"><span class="toc-number">1.3.3.</span> <span class="toc-text">CatchTableType结构</span></a></li></ol></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E8%BF%98%E5%8E%9F%E4%BB%A3%E7%A0%81%E7%9A%84%E9%80%BB%E8%BE%91%EF%BC%9A"><span class="toc-number">1.4.</span> <span class="toc-text">还原代码的逻辑：</span></a></li></ol></li></ol></div></div></div></div></main><footer id="footer"><div id="footer-wrap"><div class="copyright">&copy;2020 - 2024 By Ccai</div><div class="framework-info"><span>框架 </span><a target="_blank" rel="noopener" href="https://hexo.io">Hexo</a><span class="footer-separator">|</span><span>主题 </span><a target="_blank" rel="noopener" href="https://github.com/jerryc127/hexo-theme-butterfly">Butterfly</a></div></div></footer></div><div id="rightside"><div id="rightside-config-hide"><button id="readmode" type="button" title="阅读模式"><i class="fas fa-book-open"></i></button><button id="darkmode" type="button" title="浅色和深色模式转换"><i class="fas fa-adjust"></i></button><button id="hide-aside-btn" type="button" title="单栏和双栏切换"><i class="fas fa-arrows-alt-h"></i></button></div><div id="rightside-config-show"><button id="rightside-config" type="button" title="设置"><i class="fas fa-cog fa-spin"></i></button><button class="close" id="mobile-toc-button" type="button" title="目录"><i class="fas fa-list-ul"></i></button><button id="go-up" type="button" title="回到顶部"><span class="scroll-percent"></span><i class="fas fa-arrow-up"></i></button></div></div><div><script src="/js/utils.js?v=4.13.0"></script><script src="/js/main.js?v=4.13.0"></script><script src="https://cdn.jsdelivr.net/npm/@fancyapps/ui@5.0.33/dist/fancybox/fancybox.umd.min.js"></script><div class="js-pjax"></div><script async data-pjax src="//busuanzi.ibruce.info/busuanzi/2.3/busuanzi.pure.mini.js"></script><div id="local-search"><div class="search-dialog"><nav class="search-nav"><span class="search-dialog-title">搜索</span><span id="loading-status"></span><button class="search-close-button"><i class="fas fa-times"></i></button></nav><div class="is-center" id="loading-database"><i class="fas fa-spinner fa-pulse"></i><span>  数据库加载中</span></div><div class="search-wrap"><div id="local-search-input"><div class="local-search-box"><input class="local-search-box--input" placeholder="搜索文章" type="text"/></div></div><hr/><div id="local-search-results"></div><div id="local-search-stats-wrap"></div></div></div><div id="search-mask"></div><script src="/js/search/local-search.js?v=4.13.0"></script></div></div></body></html>
